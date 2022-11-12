@@ -30,7 +30,6 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Settings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(ProjectDir)TAS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(ProjectDir)VideoInterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-
       <!--Jump through some hoops to generate a pch file local to this project-->
       <AdditionalIncludeDirectories>$(SourceDir)PCH;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -196,6 +195,13 @@
     <ClCompile Include="Settings\PathPane.cpp" />
     <ClCompile Include="Settings\USBDeviceAddToWhitelistDialog.cpp" />
     <ClCompile Include="Settings\WiiPane.cpp" />
+    <ClCompile Include="TAS\GBAEMemoryModel.cpp" />
+    <ClCompile Include="TAS\GBAEMemoryView.cpp" />
+    <ClCompile Include="TAS\GBAEMemoryWindow.cpp" />
+    <ClCompile Include="TAS\GBATASInputEditor.cpp" />
+    <ClCompile Include="TAS\GBATASInputEditorModel.cpp" />
+    <ClCompile Include="TAS\GBATASInputEditorView.cpp" />
+    <ClCompile Include="TAS\GBATASInputWindow.cpp" />
     <ClCompile Include="TAS\GCTASInputWindow.cpp" />
     <ClCompile Include="TAS\IRWidget.cpp" />
     <ClCompile Include="TAS\StickWidget.cpp" />
@@ -236,6 +242,8 @@
     <ClInclude Include="QtUtils\WrapInScrollArea.h" />
     <ClInclude Include="ResourcePackManager.h" />
     <ClInclude Include="Resources.h" />
+    <QtMoc Include="TAS\GBATASInputEditorModel.h" />
+    <QtMoc Include="TAS\GBATASInputEditorView.h" />
     <ClInclude Include="TAS\TASSlider.h" />
     <ClInclude Include="Translation.h" />
     <ClInclude Include="WiiUpdate.h" />
@@ -374,6 +382,11 @@
     <QtMoc Include="Settings\PathPane.h" />
     <QtMoc Include="Settings\USBDeviceAddToWhitelistDialog.h" />
     <QtMoc Include="Settings\WiiPane.h" />
+    <QtMoc Include="TAS\GBAEMemoryModel.h" />
+    <QtMoc Include="TAS\GBAEMemoryView.h" />
+    <QtMoc Include="TAS\GBAEMemoryWindow.h" />
+    <QtMoc Include="TAS\GBATASInputWindow.h" />
+    <QtMoc Include="TAS\GBATASInputEditor.h" />
     <QtMoc Include="TAS\GCTASInputWindow.h" />
     <QtMoc Include="TAS\IRWidget.h" />
     <QtMoc Include="TAS\StickWidget.h" />

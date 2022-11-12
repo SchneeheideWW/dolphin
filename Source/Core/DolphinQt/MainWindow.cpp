@@ -107,6 +107,9 @@
 #include "DolphinQt/RiivolutionBootWidget.h"
 #include "DolphinQt/SearchBar.h"
 #include "DolphinQt/Settings.h"
+#include "DolphinQt/TAS/GBAEMemoryWindow.h"
+#include "DolphinQt/TAS/GBATASInputEditor.h"
+#include "DolphinQt/TAS/GBATASInputWindow.h"
 #include "DolphinQt/TAS/GCTASInputWindow.h"
 #include "DolphinQt/TAS/WiiTASInputWindow.h"
 #include "DolphinQt/ToolBar.h"
@@ -419,18 +422,25 @@ void MainWindow::CreateComponents()
 
   for (int i = 0; i < 4; i++)
   {
+    // Schnee: added GBA TAS Input 
+    m_gba_tas_input_windows[i] = new GBATASInputWindow(nullptr, i);
     m_gc_tas_input_windows[i] = new GCTASInputWindow(nullptr, i);
     m_wii_tas_input_windows[i] = new WiiTASInputWindow(nullptr, i);
   }
 
   Movie::SetGCInputManip([this](GCPadStatus* pad_status, int controller_id) {
     m_gc_tas_input_windows[controller_id]->GetValues(pad_status);
+    m_gba_tas_input_windows[controller_id]->GetValues(pad_status);
   });
 
   Movie::SetWiiInputManip([this](WiimoteCommon::DataReportBuilder& rpt, int controller_id, int ext,
                                  const WiimoteEmu::EncryptionKey& key) {
     m_wii_tas_input_windows[controller_id]->GetValues(rpt, ext, key);
   });
+
+  // Schnee: GBA TAS Input Editor
+  m_gba_tas_input_editor = new GBATASInputEditor(nullptr);
+  m_gba_tas_ie_memory_editor = new GBAEMemoryWindow(nullptr);
 
   m_jit_widget = new JITWidget(this);
   m_log_widget = new LogWidget(this);
@@ -550,6 +560,10 @@ void MainWindow::ConnectMenuBar()
   connect(m_menu_bar, &MenuBar::StopRecording, this, &MainWindow::OnStopRecording);
   connect(m_menu_bar, &MenuBar::ExportRecording, this, &MainWindow::OnExportRecording);
   connect(m_menu_bar, &MenuBar::ShowTASInput, this, &MainWindow::ShowTASInput);
+  // Schneeheide
+  connect(m_menu_bar, &MenuBar::ShowGBATASInputEditor, this, &MainWindow::ShowGBATASInputEditor);
+  connect(m_menu_bar, &MenuBar::ShowGBATASIEMemoryEditor, this,
+          &MainWindow::ShowGBATASIEMemoryEditor);
 
   // View
   connect(m_menu_bar, &MenuBar::ShowList, m_game_list, &GameList::SetListView);
@@ -1793,13 +1807,27 @@ void MainWindow::ShowTASInput()
 {
   for (int i = 0; i < num_gc_controllers; i++)
   {
+    // Schnee: exclude SIDEVICE_GC_GBA_EMULATED for it shall be separate
     const auto si_device = Config::Get(Config::GetInfoForSIDevice(i));
     if (si_device != SerialInterface::SIDEVICE_NONE &&
+        si_device != SerialInterface::SIDEVICE_GC_GBA_EMULATED &&
         si_device != SerialInterface::SIDEVICE_GC_GBA)
     {
       m_gc_tas_input_windows[i]->show();
       m_gc_tas_input_windows[i]->raise();
       m_gc_tas_input_windows[i]->activateWindow();
+    }
+  }
+
+  for (int i = 0; i < num_gba_controllers; i++)
+  {
+    // Schnee: exclusive SIDEVICE_GC_GBA_EMULATED
+    const auto si_device = Config::Get(Config::GetInfoForSIDevice(i));
+    if (si_device == SerialInterface::SIDEVICE_GC_GBA_EMULATED)
+    {
+      m_gba_tas_input_windows[i]->show();
+      m_gba_tas_input_windows[i]->raise();
+      m_gba_tas_input_windows[i]->activateWindow();
     }
   }
 
@@ -1814,6 +1842,56 @@ void MainWindow::ShowTASInput()
     }
   }
 }
+
+// Schnee: GBA TAS Input Editor
+void MainWindow::ShowGBATASInputEditor()
+{
+  const auto si_device_one = Config::Get(Config::GetInfoForSIDevice(0));
+  const auto si_device_two = Config::Get(Config::GetInfoForSIDevice(1));
+  const auto si_device_three = Config::Get(Config::GetInfoForSIDevice(2));
+  const auto si_device_four = Config::Get(Config::GetInfoForSIDevice(3));
+
+  if (si_device_one != SerialInterface::SIDEVICE_GC_GBA_EMULATED ||
+      si_device_two != SerialInterface::SIDEVICE_GC_GBA_EMULATED ||
+      si_device_three != SerialInterface::SIDEVICE_NONE ||
+      si_device_four != SerialInterface::SIDEVICE_NONE)
+  {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("Warning"));
+    msgBox.setWindowIcon(Resources::GetAppIcon());
+    msgBox.setText(tr("This tool is designed for integrated GBAs in Port 1 & 2 only!"));
+    msgBox.setInformativeText(tr("Use at your own discretion."));
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+  }
+
+  m_gba_tas_input_editor->show();
+  //m_gba_tas_input_editor->showFullScreen();
+  //m_gba_tas_input_editor->raise();
+  //m_gba_tas_input_editor->activateWindow();
+  //m_gba_tas_input_editor->isActiveWindow();
+}
+
+void MainWindow::ShowGBATASIEMemoryEditor()
+{
+  m_gba_tas_ie_memory_editor->show();
+  /* if (Core::IsRunning())
+    m_gba_tas_ie_memory_editor->show();
+  else
+  { 
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("Warning"));
+    msgBox.setWindowIcon(Resources::GetAppIcon());
+    msgBox.setText(tr("Emulation is not running."));
+    msgBox.setInformativeText(tr());
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+  }*/
+
+}
+
 
 void MainWindow::OnConnectWiiRemote(int id)
 {

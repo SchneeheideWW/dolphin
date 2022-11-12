@@ -25,7 +25,11 @@ class DragEnterEvent;
 class FIFOPlayerWindow;
 class FreeLookWindow;
 class GameList;
+// Schnee: added GBA
+class GBATASInputWindow;
 class GCTASInputWindow;
+class GBATASInputEditor;
+class GBAEMemoryWindow;
 class GraphicsWindow;
 class HotkeyScheduler;
 class JITWidget;
@@ -45,6 +49,7 @@ class ThreadWidget;
 class ToolBar;
 class WatchWidget;
 class WiiTASInputWindow;
+
 
 namespace DiscIO
 {
@@ -180,6 +185,8 @@ private:
   void OnActivateChat();
   void OnRequestGolfControl();
   void ShowTASInput();
+  void ShowGBATASInputEditor();
+  void ShowGBATASIEMemoryEditor();
 
   void ChangeDisc();
   void EjectDisc();
@@ -223,10 +230,18 @@ private:
   NetPlayDialog* m_netplay_dialog;
   DiscordHandler* m_netplay_discord;
   NetPlaySetupDialog* m_netplay_setup_dialog;
+
+  // Schnee: added exclusive GBA TASing window 
+  static constexpr int num_gba_controllers = 4;
+  std::array<GBATASInputWindow*, num_gba_controllers> m_gba_tas_input_windows{};
   static constexpr int num_gc_controllers = 4;
   std::array<GCTASInputWindow*, num_gc_controllers> m_gc_tas_input_windows{};
   static constexpr int num_wii_controllers = 4;
   std::array<WiiTASInputWindow*, num_wii_controllers> m_wii_tas_input_windows{};
+
+  // Schnee: special GBA TASing environment
+  GBATASInputEditor* m_gba_tas_input_editor;
+  GBAEMemoryWindow* m_gba_tas_ie_memory_editor;
 
   BreakpointWidget* m_breakpoint_widget;
   CodeWidget* m_code_widget;

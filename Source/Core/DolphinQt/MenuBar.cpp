@@ -751,6 +751,10 @@ void MenuBar::AddMovieMenu()
   connect(m_recording_read_only, &QAction::toggled, [](bool value) { Movie::SetReadOnly(value); });
 
   movie_menu->addAction(tr("TAS Input"), this, [this] { emit ShowTASInput(); });
+  movie_menu->addAction(tr("GBA TAS Input Editor"), this, [this]
+    { emit ShowGBATASInputEditor(); });
+  movie_menu->addAction(tr("GBATASIE Memory Editor"), this, [this]
+    { emit ShowGBATASIEMemoryEditor(); });
 
   movie_menu->addSeparator();
 

@@ -331,6 +331,10 @@ add_executable(dolphin-emu
   Settings/WiiPane.h
   Settings/USBDeviceAddToWhitelistDialog.cpp
   Settings/USBDeviceAddToWhitelistDialog.h
+  TAS/GBATASInputWindow.cpp
+  TAS/GBATASInputWindow.h
+  TAS/GBATASInputEditor.cpp
+  TAS/GBATASInputEditor.h
   TAS/GCTASInputWindow.cpp
   TAS/GCTASInputWindow.h
   TAS/WiiTASInputWindow.cpp

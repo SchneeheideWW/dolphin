@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "Core/HW/SI/SI_DeviceGBAEmu.h"
+#include "Core/HW/SI/GBAEditorInputs.h"
 
 #include <vector>
 
@@ -122,8 +123,9 @@ bool CSIDevice_GBAEmu::GetData(u32& hi, u32& low)
   if (!NetPlay::IsNetPlayRunning())
     pad_status = Pad::GetGBAStatus(m_device_number);
   SerialInterface::CSIDevice_GCController::HandleMoviePadStatus(m_device_number, &pad_status);
+  Schneeheide::GBAEditorInputs::ApplyGBAEditorInputs(m_device_number, &pad_status);
 
-  static constexpr std::array<PadButton, 10> buttons_map = {
+    static constexpr std::array<PadButton, 10> buttons_map = {
       PadButton::PAD_BUTTON_A,      // A
       PadButton::PAD_BUTTON_B,      // B
       PadButton::PAD_TRIGGER_Z,     // Select
