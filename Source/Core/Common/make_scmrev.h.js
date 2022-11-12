@@ -74,7 +74,7 @@ function GetFileContents(f)
 // get info from git
 var gitexe = GetGitExe();
 var revision	= GetFirstStdOutLine(gitexe + cmd_revision);
-var describe	= GetFirstStdOutLine(gitexe + cmd_describe);
+var describe = "5.0-16795 - GBA Co-op TAS Edition-";
 var branch		= GetFirstStdOutLine(gitexe + cmd_branch);
 var isStable = +("master" == branch || "stable" == branch);
 
