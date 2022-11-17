@@ -40,10 +40,6 @@ void GBAEMemoryView::keyPressEvent(QKeyEvent* event)
     }
     QApplication::clipboard()->setText(text);
   }
-
-  if (event->matches(QKeySequence::SelectAll))
-  {
-    QItemSelection selection(gbaEMemoryModel->index(0, 0), gbaEMemoryModel->index(7, 2));
-    selectionModel()->select(selection, QItemSelectionModel::Select);
-  }
+  else
+    return QTableView::keyPressEvent(event);
 }
