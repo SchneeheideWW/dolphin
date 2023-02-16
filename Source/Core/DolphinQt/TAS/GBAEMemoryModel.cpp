@@ -215,7 +215,7 @@ bool GBAEMemoryModel::setData(const QModelIndex& index, const QVariant& value, i
       }
       if (row == 5)  // Combo P1
       {
-        PowerPC::HostWrite_U16(value.toInt(), PowerPC::HostRead_U32(m_mem_base) + 0xCFB);
+        PowerPC::HostWrite_U8(value.toInt(), PowerPC::HostRead_U32(m_mem_base) + 0xCFB);
         gbae_memory_vector[10] = value.toInt();
       }
     }
@@ -251,7 +251,7 @@ bool GBAEMemoryModel::setData(const QModelIndex& index, const QVariant& value, i
       }
       if (row == 4)  // Gems P2
       {
-        PowerPC::HostWrite_U8(value.toInt(), PowerPC::HostRead_U32(m_mem_base) + 0x2556);
+        PowerPC::HostWrite_U16(value.toInt(), PowerPC::HostRead_U32(m_mem_base) + 0x2556);
         gbae_memory_vector[9] = value.toInt();
       }
       if (row == 5)  // Combo P2

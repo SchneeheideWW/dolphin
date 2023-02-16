@@ -254,6 +254,8 @@ void GBATASInputEditorView::FrameAdvance(QKeyEvent* event)
 {
   if (event->key() == Qt::Key_F)
     Core::DoFrameStep();
+  else if (event->key() == Qt::Key_Space)
+    Core::DoFrameStep();
 }
 
 void GBATASInputEditorView::ToggleEmulationPaused(QKeyEvent* event)
